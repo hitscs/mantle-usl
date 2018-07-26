@@ -273,20 +273,19 @@ along with this software (see the LICENSE.md file). If not, see
         </description>
         <in-parameters>
             <auto-parameters entity-name="mantle.party.Person" include="nonpk"/>
-            <parameter name="firstName" required="true"/>
-            <parameter name="lastName" required="true"/>
+            <parameter name="userFullName" required="true"/>
 
             <parameter name="disabled" default-value="N"/>
             <parameter name="requirePasswordChange" default-value="N"/>
 
             <parameter name="emailAddress" required="true"><text-email/></parameter>
             <parameter name="username" default="emailAddress"/>
-            <parameter name="newPassword"><description>If empty won't set a password, user will have to change or reset.</description></parameter>
-            <parameter name="newPasswordVerify"/>
+            <parameter name="newPassword" required="true"><description>If empty won't set a password, user will have to change or reset.</description></parameter>
+            <parameter name="newPasswordVerify" required="true"/>
 
             <parameter name="currencyUomId"/>
-            <parameter name="locale"/>
-            <parameter name="timeZone"/>
+            <parameter name="locale" default-value="zh_CN"/>
+            <parameter name="timeZone" default-value="Asia/Harbin"/>
 
             <!-- removed because creates a security hole as any open access to this service that doesn't restrict this parameter could be used to get admin access to system: <parameter name="userGroupId"/> -->
             <parameter name="roleTypeId"/>
@@ -309,7 +308,6 @@ along with this software (see the LICENSE.md file). If not, see
                     <econdition field-name="emailAddress"/></entity-find>
                 <if condition="existingUaList"><return error="true" message="Email ${emailAddress} is already in use. Login with username ${existingUaList[0].username}"/></if>
 
-                <set field="userFullName" value="${ec.resource.expand('PartyFullNameTemplate','')}"/>
                 <if condition="newPassword"><then>
                     <service-call name="org.moqui.impl.UserServices.create#UserAccount" in-map="context" out-map="newUaOut"/>
                 </then><else>
@@ -347,7 +345,7 @@ along with this software (see the LICENSE.md file). If not, see
 
             <parameter name="disabled"/>
             <parameter name="requirePasswordChange"/>
-
+            <parameter name="userFullName"/>
             <parameter name="emailAddress"><text-email/></parameter>
             <parameter name="username"/>
 
@@ -498,8 +496,8 @@ along with this software (see the LICENSE.md file). If not, see
         <in-parameters>
             <auto-parameters entity-name="mantle.party.Party"/>
             <auto-parameters entity-name="mantle.party.Person" include="nonpk"/>
-            <parameter name="firstName" required="true"/>
-            <parameter name="lastName" required="true"/>
+            <parameter name="firstName" required="false"/>
+            <parameter name="lastName" required="false"/>
             <parameter name="roleTypeId"/>
             <parameter name="partyClassificationId"/>
         </in-parameters>
@@ -518,8 +516,8 @@ along with this software (see the LICENSE.md file). If not, see
             <parameter name="partyId"/>
             <parameter name="accountPartyId"/>
             <auto-parameters entity-name="mantle.party.Person" include="nonpk"/>
-            <parameter name="firstName" required="true"/>
-            <parameter name="lastName" required="true"/>
+            <parameter name="firstName" required="false"/>
+            <parameter name="lastName" required="false"/>
             <parameter name="roleTypeId" default-value="Customer"/>
             <parameter name="partyClassificationId"/>
 
